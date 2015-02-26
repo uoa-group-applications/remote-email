@@ -13,13 +13,13 @@
 	<packaging>jar</packaging>
 	<name>Remote Emails</name>
 	<description>Contains logic to fetch emails from centralized authoring experience</description>
-	<version>1.1</version>
+	<version>1.2-SNAPSHOT</version>
 
 	<scm>
 		<url>https://github.com/uoa-group-application/remote-email</url>
 		<connection>scm:git:https://github.com/uoa-group-applications/remote-email.git</connection>
 		<developerConnection>scm:git:git@github.com:uoa-group-applications/remote-email.git</developerConnection>
-	  <tag>remote-email-1.1</tag>
+	  <tag>HEAD</tag>
   </scm>
 	
 	<dependencies>
