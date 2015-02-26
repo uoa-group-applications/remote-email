@@ -1,9 +1,12 @@
 package nz.ac.auckland.mail
 
+import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.transform.CompileStatic
 import nz.ac.auckland.common.config.ConfigKey
 import nz.ac.auckland.common.stereotypes.UniversityComponent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * @author Marnix Cook
@@ -14,6 +17,8 @@ import nz.ac.auckland.common.stereotypes.UniversityComponent
 @CompileStatic
 @UniversityComponent
 class RemoteMailFetcher {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoteMailFetcher)
 
     /**
      * Base URL
@@ -31,7 +36,17 @@ class RemoteMailFetcher {
         URL jsonEndpointUrl = getUrlForId(remoteId);
         URLConnection connection = jsonEndpointUrl.openConnection();
         ObjectMapper objMapper = new ObjectMapper();
-        return objMapper.readValue(connection.inputStream, MailContent);
+
+        try {
+            return objMapper.readValue(connection.inputStream, MailContent);
+        }
+        catch (JsonParseException jpEx) {
+            LOG.error("The received JSON response was invalid, aborting.")
+        }
+        catch (FileNotFoundException fnfEx) {
+            LOG.error("404: The URL `${this.getEndpoint()}` does not exist");
+        }
+        return null;
     }
 
     /**

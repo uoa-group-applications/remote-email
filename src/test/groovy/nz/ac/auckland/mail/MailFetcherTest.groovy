@@ -28,8 +28,8 @@ class MailFetcherTest extends GroovyTestCase {
         // assertions
         assertNotNull(content)
         assertEquals("remote.test.mail", content.id)
-        assertEquals("This is my email.\n\nIt is awesome.", content.plain)
-        assertEquals("<h1>This is my email.</h1><p>It is awesome</p><img src='https://www.google.co.nz/images/srpr/logo11w.png' alt='Google Logo'>", content.html)
+        assertEquals("Hi {{name}},\nThis is my email.\n\nIt is awesome.", content.plain)
+        assertEquals("<h2>Hi {{name}}<h2><h1>This is my email.</h1><p>It is awesome</p><img src=\"https://www.google.co.nz/images/srpr/logo11w.png\" alt=\"Google Logo\">", content.html)
     }
 
 }
