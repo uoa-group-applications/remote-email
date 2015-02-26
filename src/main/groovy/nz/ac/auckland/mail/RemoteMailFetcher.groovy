@@ -3,6 +3,7 @@ package nz.ac.auckland.mail
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import groovy.transform.CompileStatic
+import net.stickycode.stereotype.configured.PostConfigured
 import nz.ac.auckland.common.config.ConfigKey
 import nz.ac.auckland.common.stereotypes.UniversityComponent
 import org.slf4j.Logger
@@ -21,10 +22,47 @@ public class RemoteMailFetcher {
     private static final Logger LOG = LoggerFactory.getLogger(RemoteMailFetcher)
 
     /**
+     * Cache content
+     */
+    private Map<String, String> contentCache = [:];
+
+    /**
+     * Mails that should be preloaded
+     */
+    @ConfigKey("remote.mail.preload")
+    private String preloadThese;
+
+    /**
      * Base URL
      */
     @ConfigKey("remote.mail.endpoint")
     private String endpoint;
+
+    /**
+     * If remote mail identifiers were setup they will be preloaded, or
+     * application will fail with exception when they don't exist.
+     */
+    @PostConfigured
+    public void configurationCompleted() {
+        if (!preloadThese) {
+            LOG.info("Nothing to preload.")
+            return;
+        }
+
+        preloadThese.split(",").each { String remoteId ->
+            remoteId = remoteId.trim();
+            MailContent email = this.getEmailById(remoteId);
+
+            // not loaded properly?
+            if (!email) {
+                throw new IllegalStateException(
+                    String.format(
+                        "The remote mail with identifier `%s` does not exist, will not continue application startup", remoteId
+                    )
+                );
+            }
+        }
+    }
 
     /**
      * Get the email from a remote source
@@ -33,21 +71,46 @@ public class RemoteMailFetcher {
      * @return the mail content object that has the json values from the endpoint mapped to it
      */
     public MailContent getEmailById(String remoteId) {
-        URL jsonEndpointUrl = getUrlForId(remoteId);
-        URLConnection connection = jsonEndpointUrl.openConnection();
         ObjectMapper objMapper = new ObjectMapper();
 
         try {
-            MailResponse response = objMapper.readValue(connection.inputStream, MailResponse);
+            String endpointContents = getEndpointContentForId(remoteId)
+            MailResponse response = objMapper.readValue(endpointContents, MailResponse);
             return response.fields
         }
         catch (JsonParseException jpEx) {
             LOG.error("The received JSON response was invalid, aborting.")
         }
-        catch (FileNotFoundException fnfEx) {
-            LOG.error("404: The URL `${this.getEndpoint()}` does not exist");
-        }
         return null;
+    }
+
+    /**
+     * This method retrieves the content from the endpoint
+     *
+     * @param remoteId is the remote mail ID to retrieve
+     * @return the string with content
+     * @throws FileNotFoundException when the URL is not found or if the server is offline
+     */
+    protected String getEndpointContentForId(String remoteId) throws FileNotFoundException {
+        try {
+            // try to load it from the URL
+            URL jsonEndpointUrl = getUrlForId(remoteId);
+            URLConnection connection = jsonEndpointUrl.openConnection();
+            String endpointContents = connection.inputStream.readLines()?.join("\n");
+
+            // store latest version in the content cache
+            contentCache[remoteId] = endpointContents;
+
+            return endpointContents
+        }
+        catch (FileNotFoundException fnfEx) {
+            LOG.error("404: The URL `${this.getEndpoint()}` does not exist, will try to return existing template content");
+
+            // let's see if there was already some content for this one
+            if (contentCache[remoteId]) {
+                return contentCache[remoteId];
+            }
+        }
     }
 
     /**
