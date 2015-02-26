@@ -7,7 +7,7 @@ package nz.ac.auckland.mail
  */
 class MailResponse {
 
-    Integer status;
+    String status;
 
     MailContent fields;
 }
