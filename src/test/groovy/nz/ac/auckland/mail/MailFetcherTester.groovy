@@ -6,7 +6,7 @@ import org.junit.Test
 /**
  * @author Marnix Cook
  */
-class MailFetcherTest extends GroovyTestCase {
+class MailFetcherTester extends GroovyTestCase {
 
     public static final String BASE_URL = "http://localhost/poc/remote-email/getMail.php?id="
 

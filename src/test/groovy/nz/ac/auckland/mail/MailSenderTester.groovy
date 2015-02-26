@@ -8,7 +8,7 @@ import org.junit.Test
  *
  * Test the sending of the meail
  */
-class MailSenderTest extends GroovyTestCase {
+class MailSenderTester extends GroovyTestCase {
 
     public static final String PLAIN_TEXT = "Test"
     public static final String HTML_TEXT = "<p>Test</p>"
