@@ -1,5 +1,8 @@
 package nz.ac.auckland.mail
 
+import com.github.mustachejava.DefaultMustacheFactory
+import com.github.mustachejava.Mustache
+import com.github.mustachejava.MustacheFactory
 import nz.ac.auckland.common.config.ConfigKey
 import nz.ac.auckland.common.stereotypes.UniversityComponent
 import org.apache.commons.mail.ImageHtmlEmail
@@ -43,8 +46,8 @@ class RemoteMailSender {
 
         // setup mail content
 
-        imageMail.textMsg = mail.plain
-        imageMail.htmlMsg = mail.html
+        imageMail.textMsg = compileText(mail.plain, context)
+        imageMail.htmlMsg = compileText(mail.html, context)
         imageMail.from = from
         imageMail.addTo(to);
 
@@ -55,6 +58,22 @@ class RemoteMailSender {
 
         // send the e-mail
         imageMail.send()
+    }
+
+    /**
+     * Compile the template using mustache.
+     *
+     * @param contents is the contents to parse
+     * @param context is the context to parse the template with
+     * @return the compiled string
+     */
+    protected String compileText(String contents, Map<String, String> context) {
+        MustacheFactory mFactory = new DefaultMustacheFactory()
+        Mustache mTemplate = mFactory.compile(new StringReader(contents), "mailTemplate")
+
+        StringWriter stringWriter = new StringWriter()
+        mTemplate.execute(stringWriter, context)
+        return stringWriter.toString()
     }
 
     /**

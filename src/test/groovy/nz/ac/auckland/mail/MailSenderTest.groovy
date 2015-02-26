@@ -37,7 +37,9 @@ class MailSenderTest extends GroovyTestCase {
         s.send(
             content,
             "No reply <noreply@auckland.ac.nz>",
-            "Marnix Cook <m.cook@auckland.ac.nz>"
+            "Marnix Cook <m.cook@auckland.ac.nz>", [
+                    name: "Marnix"
+            ]
         )
     }
 
