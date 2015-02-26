@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
  */
 @CompileStatic
 @UniversityComponent
-class RemoteMailFetcher {
+public class RemoteMailFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteMailFetcher)
 
@@ -38,7 +38,8 @@ class RemoteMailFetcher {
         ObjectMapper objMapper = new ObjectMapper();
 
         try {
-            return objMapper.readValue(connection.inputStream, MailContent);
+            MailResponse response = objMapper.readValue(connection.inputStream, MailResponse);
+            return response.fields
         }
         catch (JsonParseException jpEx) {
             LOG.error("The received JSON response was invalid, aborting.")

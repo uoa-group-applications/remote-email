@@ -40,10 +40,13 @@ The class below loads and sends a remote mail:
     }
 
 Expected JSON response:
-
+    
     {
-        "id" : "remote.id",
-        "plain" : "Plain text version",
-        "html" : "HTML version",
-        "subject" : "Email subject"
+        "status" : "ok",
+        "fields" : {
+            "id" : "remote.id",
+            "plain" : "Plain text version",
+            "html" : "HTML version",
+            "subject" : "Email subject"
+        }
     }

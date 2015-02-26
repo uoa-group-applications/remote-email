@@ -16,13 +16,13 @@ import org.apache.commons.mail.resolver.DataSourceUrlResolver
  * template.
  */
 @UniversityComponent
-class RemoteMailSender {
+public class RemoteMailSender {
 
     @ConfigKey("mail.smtp.host")
     private String smtpHost;
 
     @ConfigKey("mail.smtp.port")
-    private int smtpPort;
+    private Integer smtpPort;
 
     @ConfigKey("mail.remote.assetbase")
     private String assetBaseUrl;
