@@ -16,7 +16,7 @@ class MailSenderTest extends GroovyTestCase {
     public static final String BASE_URL = "http://localhost/poc/remote-email/getMail.php?id="
 
     @Ignore
-    public void testSendMail() {
+    public void sendMail() {
         RemoteMailSender s = [
 
             getSmtpPort : {-> 2025 },

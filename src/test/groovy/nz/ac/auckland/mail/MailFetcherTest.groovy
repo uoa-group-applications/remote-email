@@ -14,7 +14,7 @@ class MailFetcherTest extends GroovyTestCase {
      * Test that the remote fetching and json marshalling is working
      */
     @Ignore
-    public void testGetFromRemote() {
+    public void getFromRemote() {
 
         // retrieve mail content
         RemoteMailFetcher f = [
