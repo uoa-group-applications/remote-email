@@ -4,15 +4,15 @@ import org.junit.Ignore
 import org.junit.Test
 
 /**
-* @author Marnix Cook
-*/
+ * @author Marnix Cook
+ */
 class MailFetcherTester extends GroovyTestCase {
 
 	public static final String BASE_URL = "http://localhost/poc/remote-email/getMail.php?id="
 
 	/**
-	* Test that the remote fetching and json marshalling is working
-	*/
+	 * Test that the remote fetching and json marshalling is working
+	 */
 	@Ignore
 	public void getFromRemote() {
 
@@ -33,4 +33,5 @@ class MailFetcherTester extends GroovyTestCase {
 	}
 
 }
+
 

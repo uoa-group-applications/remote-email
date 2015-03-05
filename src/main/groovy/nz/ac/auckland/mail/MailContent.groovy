@@ -4,33 +4,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
-* @author Marnix Cook
-*
-* The JSON Object that is received from the remote server.
-*/
+ * @author Marnix Cook
+ *
+ * The JSON Object that is received from the remote server.
+ */
 class MailContent {
 
 	/**
-	* The ID
-	*/
+	 * The ID
+	 */
 	@JsonProperty("Id")
 	String id
 
 	/**
-	* The mail subject
-	*/
+	 * The mail subject
+	 */
 	@JsonProperty("Subject")
 	String subject;
 
 	/**
-	* The plain text version
-	*/
+	 * The plain text version
+	 */
 	@JsonProperty("Plain")
 	String plain
 
 	/**
-	* The HTML version
-	*/
+	 * The HTML version
+	 */
 	@JsonProperty("HTML")
 	String html
 
@@ -38,4 +38,5 @@ class MailContent {
 	Map<String, String> headers = [:];
 
 }
+
 

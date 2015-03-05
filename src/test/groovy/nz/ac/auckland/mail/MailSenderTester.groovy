@@ -4,10 +4,10 @@ import org.junit.Ignore
 import org.junit.Test
 
 /**
-* @author Marnix Cook
-*
-* Test the sending of the meail
-*/
+ * @author Marnix Cook
+ *
+ * Test the sending of the meail
+ */
 class MailSenderTester extends GroovyTestCase {
 
 	public static final String PLAIN_TEXT = "Test"
@@ -52,4 +52,5 @@ class MailSenderTester extends GroovyTestCase {
 	}
 
 }
+
 
